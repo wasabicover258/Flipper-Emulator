@@ -19,7 +19,8 @@ New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, 
 > **Stable helper, experimental emulation:** 12.2 is the current release of this Windows helper. On top of the program (`.exe`), colorways and in-app updates from 10.x it adds the **Community & Feedback** button: a direct way to write to the project on GitHub. It keeps everything from 9.1 (qFlipper-style Flipper Zero window), 8.0 (redesigned app window, one-click **Uninstall Everything**), 7.11 (real-time Flipper Zero emulation) and 6.6 (app shelf, factory reset). Earlier releases remain available as `.bat` files. The real-OS mode itself remains experimental because QEMU emulates hardware the image was not built for.
 
 > **Disclaimer:** This is an unofficial community project. It is **not** affiliated with or endorsed by Flipper Devices or GitHub. This repository contains no Flipper software - the helper only downloads publicly available components from their official sources.
-<img width="2400" height="1727" alt="image" src="https://github.com/user-attachments/assets/fe33f891-95a7-428b-af14-d64110d6c75e" />
+<img width="2400" height="1727" alt="flipper-emulator-collage" src="https://github.com/user-attachments/assets/5024e474-8151-4218-94f6-6b1eb5357a43" />
+
 
 ---
 

@@ -3,11 +3,11 @@
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%2F%2011-0078D6)
 ![Requires](https://img.shields.io/badge/requires-WSL%202-blue)
 ![Status](https://img.shields.io/badge/status-unofficial-orange)
-![Version](https://img.shields.io/badge/public_release-12.0-brightgreen)
+![Version](https://img.shields.io/badge/public_release-12.1-brightgreen)
 
 Try the **Flipper One** user interface and emulate the **Flipper Zero** on any Windows PC - no device, no extra hardware, no manual setup.
 
-Download `FlipperEmulator 12.0.exe`, double-click it and (if you like) let it install itself like a normal program: it gets its own icon on the desktop and in the Start menu. The app then downloads everything it needs, sets up an isolated Linux environment and opens a window in which you choose between three Flipper One modes and a separate **Flipper Zero emulator**:
+Download `FlipperEmulator 12.1.exe`, double-click it and (if you like) let it install itself like a normal program: it gets its own icon on the desktop and in the Start menu. The app then downloads everything it needs, sets up an isolated Linux environment and opens a window in which you choose between three Flipper One modes and a separate **Flipper Zero emulator**:
 
 - **FlipCTL preview** - the fast, stable test UI from the Flipper One image. Hardware features are simulated.
 - **Real Flipper OS** - the actual Flipper OS kernel and initramfs, booted in QEMU (aarch64) on your PC. Experimental.
@@ -16,7 +16,7 @@ Download `FlipperEmulator 12.0.exe`, double-click it and (if you like) let it in
 
 New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, Desert, EVA-01, Moss), install the app as a **real program** with an icon, let the **Check for updates** button fetch new versions from GitHub, and use the **Community & Feedback** button to report bugs, share ideas, ask questions or show what you built.
 
-> **Stable helper, experimental emulation:** 12.0 is the current release of this Windows helper. On top of the program (`.exe`), colorways and in-app updates from 10.x it adds the **Community & Feedback** button: a direct way to write to the project on GitHub. It keeps everything from 9.1 (qFlipper-style Flipper Zero window), 8.0 (redesigned app window, one-click **Uninstall Everything**), 7.11 (real-time Flipper Zero emulation) and 6.6 (app shelf, factory reset). Earlier releases remain available as `.bat` files. The real-OS mode itself remains experimental because QEMU emulates hardware the image was not built for.
+> **Stable helper, experimental emulation:** 12.1 is the current release of this Windows helper. On top of the program (`.exe`), colorways and in-app updates from 10.x it adds the **Community & Feedback** button: a direct way to write to the project on GitHub. It keeps everything from 9.1 (qFlipper-style Flipper Zero window), 8.0 (redesigned app window, one-click **Uninstall Everything**), 7.11 (real-time Flipper Zero emulation) and 6.6 (app shelf, factory reset). Earlier releases remain available as `.bat` files. The real-OS mode itself remains experimental because QEMU emulates hardware the image was not built for.
 
 > **Disclaimer:** This is an unofficial community project. It is **not** affiliated with or endorsed by Flipper Devices or GitHub. This repository contains no Flipper software - the helper only downloads publicly available components from their official sources.
 
@@ -45,8 +45,7 @@ New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, 
 - [Troubleshooting](#troubleshooting)
 - [Limitations](#limitations)
 - [Security Note](#security-note)
-- [Version 12.0 (current release)](#version-120-current-release)
-- [Version 11.6 (previous release)](#version-116-previous-release)
+- [Version 12.1 (current release)](#version-121-current-release)
 - [Version 11.5 (previous release)](#version-115-previous-release)
 - [Version 11.4 (previous release)](#version-114-previous-release)
 - [Version 11.3 (previous release)](#version-113-previous-release)
@@ -88,14 +87,14 @@ The File Manager adds a small, separate web page for **your own files**. It runs
 
 In 5.3, menu option **3** starts the Flipper OS (if it is not already running) and the File Manager, then opens both in two browser tabs. If the OS is already running, only the File Manager tab is added and the OS is not restarted. Menu option **8** performs a factory reset of the real Flipper OS. The helper also keeps a copy of your files on your PC, so they survive an uninstall and are restored automatically after a reinstall.
 
-### App store and microphone
+### File explorer, app store and microphone
 
-Since 11.6 (and in 12.0) the File Manager has a **side panel** next to your files (below your files on a narrow window):
+Since 12.1 the File Manager looks like the qFlipper desktop app (black window, amber frame, pixel font, folder grid) and has three tabs:
 
-- **App store:** lists every `.AppImage` from the folders `AppCatalogue` and `AppCatalogue/OSINT` of the GitHub repository (by default `wasabicover258/Flipper-Emulator`, another repository can be tried with `?repo=owner/name` behind the page address). Click **Install** and the app is downloaded by your PC, checked (it must be a type-2 AppImage built for ARM64) and installed into Flipper OS; it then shows up under **Apps**. Installed apps show **installed** and a **Remove** button, a changed file on GitHub shows **Update**, and apps built for a PC (x86-64) are marked **PC only** and cannot be installed. The list is a scrollable window of its own with a search field and the filters *All*, *Apps*, *OSINT* and *Not installed*; it loads 60 rows at a time, so hundreds of apps stay fast and the page keeps its layout.
-- **Offline and outages:** if GitHub does not answer, the panel first tries a mirror (jsDelivr) and otherwise shows the list saved last time, together with a message that says whether it is a temporary GitHub problem, your internet connection or a missing folder, the same wording as in the troubleshooting table.
-- **Microphone:** switch on **Turn on microphone** and allow the browser to use your PC microphone. The File Manager page converts the sound to 16 kHz, 16 bit, mono and hands it to a small virtual-microphone service inside Flipper OS (`http://127.0.0.1:8898/api/mic/pull?after=<position>`, status at `/api/mic/status`). Apps in Flipper OS read the sound from there; the service only answers to local addresses. **Keep the File Manager tab open** while an app uses the microphone. The virtual machine has no sound card, so built-in programs that look for a sound card (for example the *Voice recorder*) still report that no input device was found; only apps that use the virtual microphone hear your voice.
-- **Mic test app:** `Mic-Test-1.0-aarch64.AppImage` in the `AppCatalogue` folder shows the level of the PC microphone and records while you hold the **A** key (a short tap on **A** or the key **B** starts and stops a recording). Recordings are saved as `mic-test-<date>.wav` in your Files. The source and a GitHub workflow that builds the app are in `AppCatalogue-Quellen/mic-test`.
+- **Files:** the real **file explorer of Flipper OS**, laid out exactly like the file view of qFlipper: back and forward buttons, a path bar, a reload button, a **Hidden files** switch and a grid of folders and files with the qFlipper icons. It shows the whole file system of the Flipper One (start in `/home/user/Files`, where apps save their files, for example the recordings of the Mic test app); the buttons *Files*, *Home*, *Apps* and *System* jump to the important places. **Double-click** opens a folder; the path bar can be clicked at every level. A **right-click** gives *Play* or *View* (recordings can be listened to directly in the page, pictures and text files are shown), *Download*, *Rename*, *Delete* and, for `.AppImage` files, *Install*, *Reinstall* and *Remove from Apps*. New folders and renames are typed directly into the grid like in qFlipper. Files can be uploaded with the upload button or by dropping them on the page. The keyboard works too: arrow keys, **Enter** (open), **Backspace** (back), **Delete**, **F2** (rename), **Ctrl+N** (new folder), **Ctrl+G** (reload). **Safety:** everything can be viewed, but changes (upload, new folder, rename, delete) are only possible inside the home folder `/home/user`; other places, such as the system folders, are marked **read-only**. Live system files (`/proc`, `/sys`, `/dev`) cannot be opened.
+- **Apps:** the **app store** lists every `.AppImage` from the folders `AppCatalogue` and `AppCatalogue/OSINT` of the GitHub repository (by default `wasabicover258/Flipper-Emulator`, another repository can be tried with `?repo=owner/name` behind the page address). Click **Install** and the app is downloaded by your PC, checked (it must be a type-2 AppImage built for ARM64) and installed into Flipper OS; it then shows up under **Apps**. Installed apps are listed on the right with a **Remove** button, a changed file on GitHub shows **Update**, and apps built for a PC (x86-64) are marked **PC only** and cannot be installed. The store list is a scrollable window of its own with a search field and the filters *All*, *Apps*, *OSINT* and *Not installed*; it loads 60 rows at a time, so hundreds of apps stay fast. If GitHub does not answer, the store first tries a mirror (jsDelivr) and otherwise shows the list saved last time, together with a message that says whether it is a temporary GitHub problem, your internet connection or a missing folder.
+- **Microphone:** switch on **Turn on microphone** and allow the browser to use your PC microphone. The File Manager page converts the sound to 16 kHz, 16 bit, mono and hands it to a small virtual-microphone service inside Flipper OS (`http://127.0.0.1:8898/api/mic/pull?after=<position>`, status at `/api/mic/status`). Apps in Flipper OS read the sound from there; the service only answers to local addresses. **Keep the File Manager tab open** while an app uses the microphone. If the browser delivers only silence for a few seconds, the page says so and suggests choosing another microphone. The virtual machine has no sound card, so built-in programs that look for a sound card (for example the *Voice recorder*) still report that no input device was found; only apps that use the virtual microphone hear your voice.
+- **Mic test app:** `Mic-Test-1.0-aarch64.AppImage` in the `AppCatalogue` folder shows the level of the PC microphone and records while you hold the **A** key (a short tap on **A** or the key **B** starts and stops a recording). Recordings are saved as `mic-test-<date>.wav` in your Files and can be played in the **Files** tab. The source and a GitHub workflow that builds the app are in `AppCatalogue-Quellen/mic-test`.
 
 ---
 
@@ -116,7 +115,7 @@ Since 11.6 (and in 12.0) the File Manager has a **side panel** next to your file
 
 ## Quick Start
 
-1. **Download** `FlipperEmulator 12.0.exe` from the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) (or from the `Public Releases` folder). If you prefer a plain script, `FlipperEmulator 12.0.bat` does the same, but it cannot install or update itself.
+1. **Download** `FlipperEmulator 12.1.exe` from the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) (or from the `Public Releases` folder). If you prefer a plain script, `FlipperEmulator 12.1.bat` does the same, but it cannot install or update itself.
 2. **Double-click** the file. On the first start it asks whether to **install** the program:
    - **Yes** - the program is copied to your user folder, gets a Start menu entry, a desktop icon and an entry in **Apps & features**. No administrator rights are needed.
    - **No** - it runs from where it is (portable) and does not ask again.
@@ -339,7 +338,7 @@ Option 3 starts whatever is missing and opens the OS and the File Manager in two
 - **Install app bundles** from the folder into Flipper OS and launch them under **Apps** (see [Unofficial App Shelf](#unofficial-app-shelf)).
 - Open the **App Manager** from the link in the page header.
 
-Files are stored in `/home/user/Files` inside the Flipper OS. Apps can open them there. The File Manager cannot leave that folder: paths are checked on the guest side.
+Your own files are stored in `/home/user/Files` inside the Flipper OS. Apps can open them there. Since 12.1 the explorer can show the whole file system, but it can only change things inside `/home/user`: the paths are checked on the guest side, so `..` tricks and links that point out of the home folder do not help.
 
 ### PC backup and restore
 
@@ -663,7 +662,7 @@ The `.exe` is a small launcher that contains the complete helper (the same conte
 
 - Downloads come from official sources: `dl-linux-images.flipp.dev`, `cloud-images.ubuntu.com`, `nodejs.org`, GitHub (`meta/zstd`), `7-zip.org` and `qemu.weilnetz.de`. The Flipper Zero window additionally uses `python.org`, `pypi.org` (PySide6, checked against the published SHA-256) and, only if missing, Microsoft's Visual C++ runtime from `aka.ms`.
 - The 7-Zip MSI is verified with SHA-256. QEMU checksums are verified when the mirror provides them.
-- The preview server, the real-OS port forwarding and the File Manager listen on **localhost only**. The File Manager service runs as the unprivileged guest user `user` and writes only under `/home/user/Files` and `/home/user/Apps`.
+- The preview server, the real-OS port forwarding and the File Manager listen on **localhost only**. The File Manager service runs as the unprivileged guest user `user` and can only change things under `/home/user` (it can read the rest of the file system, as far as the guest user is allowed to). The service answers only to local addresses (`127.0.0.1`, `localhost`).
 - Installed app bundles run as code inside the emulated guest. The shelf verifies the AppImage format and architecture before installing, but that is not a safety or trust check. Only install bundles you trust.
 - **Update check:** the button contacts only `api.github.com` and downloads only from GitHub over HTTPS. The file is verified against the SHA-256 that GitHub publishes for the release before it replaces the program. Nothing is checked or downloaded automatically; it only happens when you press the button.
 - **Feedback:** the Community & Feedback button only opens a GitHub page in your browser. The program sends nothing itself; the version numbers of the program and of Windows are part of the opened web address and visible to you before you submit.
@@ -673,43 +672,25 @@ As with any script from the internet, **please read it before you run it**.
 
 ---
 
-## Version 12.0 (current release)
+## Version 12.1 (current release)
 
-Version **12.0** is the public release of the 11.6 development build. The program is identical to 11.6, only the version number changed, so everything from 11.6 and earlier is included:
+Version **12.1** gives the File Manager the look of qFlipper and adds the real file explorer of Flipper OS. It includes everything from 11.5 and from the development builds 11.6 and 12.0:
 
-- **App store in the File Manager** for the apps in the repository folders `AppCatalogue` and `AppCatalogue/OSINT`, with search, filters, install, update and remove.
-- **PC microphone for the Flipper One** as a virtual microphone (16 kHz, mono) inside Flipper OS, switched on in the File Manager.
+- **New look:** the File Manager uses the qFlipper style (amber frame, pixel font, tabs, folder grid, icons).
+- **File explorer:** the **Files** tab shows the real file system of the Flipper One like the qFlipper file view, with back/forward, path bar, hidden-files switch, upload, new folder, rename, delete and download. Recordings can be played, pictures and text files viewed, and `.AppImage` files installed with a right-click. Changes are only possible inside `/home/user`.
+- **App store** (since 11.6): the apps in the repository folders `AppCatalogue` and `AppCatalogue/OSINT` with search, filters, install, update and remove; long lists stay tidy.
+- **Microphone** (since 11.6): the PC microphone can be switched on in the File Manager and is offered to apps as a virtual microphone. New: a notice when the browser delivers only silence.
 - **Mic test app** `Mic-Test-1.0-aarch64.AppImage` in the `AppCatalogue` folder.
-- Everything from 11.5 and earlier (clear error messages that say whether a problem is a bug, your PC or a temporary outside problem, in-app updates, colorways, Flipper Zero emulator).
+- The File Manager service refuses requests that arrive under a made-up host name.
 
 SHA-256 of the release files:
 
 | File | SHA-256 |
 |---|---|
-| `FlipperEmulator 12.0.exe` | `C5A8727EF740BF2589B05F124C353EC8EFD84175C74F303B2889260BB778F928` |
-| `FlipperEmulator 12.0.bat` | `69D80363C0AAA3645526A6B810AEA015D3D150C9C654E8FD389D108F432B0F38` |
+| `FlipperEmulator 12.1.exe` | `7CC95BB602FDD813E755380580EF59452EFB1A34BF348D6C38BD7903881C432D` |
+| `FlipperEmulator 12.1.bat` | `3E6A5DF783EA27AE7EDE834C22DCE5099ECEC83B039D595B0DAC4C144A8D8031` |
 
-`FlipperEmulator 12.0.exe` and `FlipperEmulator 12.0.bat` are the files of the release on the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) and in the `Public Releases` folder.
-
----
-
-## Version 11.6 (previous release)
-
-Version **11.6** adds an app store and a virtual microphone to the File Manager. It includes everything from 11.5:
-
-- **App store in the File Manager:** the apps in the repository folders `AppCatalogue` and `AppCatalogue/OSINT` are listed in a scrollable side panel with search, filters, install, update and remove; very long lists stay tidy because rows are loaded in steps. Wrong or damaged files are recognized before they reach Flipper OS and explained in plain words.
-- **Microphone for the Flipper One:** the PC microphone can be switched on in the File Manager and is offered to apps as a virtual microphone (16 kHz, mono) inside Flipper OS.
-- **Mic test app** `Mic-Test-1.0-aarch64.AppImage` (folder `AppCatalogue`) with level meter and WAV recording on the **A** key, plus source and GitHub workflow in `AppCatalogue-Quellen/mic-test`.
-- The File Manager service has two new helpers: a list of installed apps (`/api/apps`) and the microphone service (`/api/mic/...`).
-
-SHA-256 of the release files:
-
-| File | SHA-256 |
-|---|---|
-| `FlipperEmulator 11.6.exe` | `0D246633F05F27547931BA4A27E9BE2AB7385B04398F5E0958F9E7AEB57F9B70` |
-| `FlipperEmulator 11.6.bat` | `34FD25B7F5A73B5C7F0C57A4B93633FD2CE42DB91B8250266B65E35C82E7EF2E` |
-
-`FlipperEmulator 11.6.exe` and `FlipperEmulator 11.6.bat` are the files of the release on the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases).
+`FlipperEmulator 12.1.exe` and `FlipperEmulator 12.1.bat` are the files of the release on the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) and in the `Public Releases` folder.
 
 ---
 

@@ -3,11 +3,11 @@
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%2F%2011-0078D6)
 ![Requires](https://img.shields.io/badge/requires-WSL%202-blue)
 ![Status](https://img.shields.io/badge/status-unofficial-orange)
-![Version](https://img.shields.io/badge/public_release-11.6-brightgreen)
+![Version](https://img.shields.io/badge/public_release-12.0-brightgreen)
 
 Try the **Flipper One** user interface and emulate the **Flipper Zero** on any Windows PC - no device, no extra hardware, no manual setup.
 
-Download `FlipperEmulator 11.6.exe`, double-click it and (if you like) let it install itself like a normal program: it gets its own icon on the desktop and in the Start menu. The app then downloads everything it needs, sets up an isolated Linux environment and opens a window in which you choose between three Flipper One modes and a separate **Flipper Zero emulator**:
+Download `FlipperEmulator 12.0.exe`, double-click it and (if you like) let it install itself like a normal program: it gets its own icon on the desktop and in the Start menu. The app then downloads everything it needs, sets up an isolated Linux environment and opens a window in which you choose between three Flipper One modes and a separate **Flipper Zero emulator**:
 
 - **FlipCTL preview** - the fast, stable test UI from the Flipper One image. Hardware features are simulated.
 - **Real Flipper OS** - the actual Flipper OS kernel and initramfs, booted in QEMU (aarch64) on your PC. Experimental.
@@ -16,7 +16,7 @@ Download `FlipperEmulator 11.6.exe`, double-click it and (if you like) let it in
 
 New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, Desert, EVA-01, Moss), install the app as a **real program** with an icon, let the **Check for updates** button fetch new versions from GitHub, and use the **Community & Feedback** button to report bugs, share ideas, ask questions or show what you built.
 
-> **Stable helper, experimental emulation:** 11.6 is the current release of this Windows helper. On top of the program (`.exe`), colorways and in-app updates from 10.x it adds the **Community & Feedback** button: a direct way to write to the project on GitHub. It keeps everything from 9.1 (qFlipper-style Flipper Zero window), 8.0 (redesigned app window, one-click **Uninstall Everything**), 7.11 (real-time Flipper Zero emulation) and 6.6 (app shelf, factory reset). Earlier releases remain available as `.bat` files. The real-OS mode itself remains experimental because QEMU emulates hardware the image was not built for.
+> **Stable helper, experimental emulation:** 12.0 is the current release of this Windows helper. On top of the program (`.exe`), colorways and in-app updates from 10.x it adds the **Community & Feedback** button: a direct way to write to the project on GitHub. It keeps everything from 9.1 (qFlipper-style Flipper Zero window), 8.0 (redesigned app window, one-click **Uninstall Everything**), 7.11 (real-time Flipper Zero emulation) and 6.6 (app shelf, factory reset). Earlier releases remain available as `.bat` files. The real-OS mode itself remains experimental because QEMU emulates hardware the image was not built for.
 
 > **Disclaimer:** This is an unofficial community project. It is **not** affiliated with or endorsed by Flipper Devices or GitHub. This repository contains no Flipper software - the helper only downloads publicly available components from their official sources.
 
@@ -45,7 +45,8 @@ New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, 
 - [Troubleshooting](#troubleshooting)
 - [Limitations](#limitations)
 - [Security Note](#security-note)
-- [Version 11.6 (current release)](#version-116-current-release)
+- [Version 12.0 (current release)](#version-120-current-release)
+- [Version 11.6 (previous release)](#version-116-previous-release)
 - [Version 11.5 (previous release)](#version-115-previous-release)
 - [Version 11.4 (previous release)](#version-114-previous-release)
 - [Version 11.3 (previous release)](#version-113-previous-release)
@@ -89,7 +90,7 @@ In 5.3, menu option **3** starts the Flipper OS (if it is not already running) a
 
 ### App store and microphone
 
-Since 11.6 the File Manager has a **side panel** next to your files (below your files on a narrow window):
+Since 11.6 (and in 12.0) the File Manager has a **side panel** next to your files (below your files on a narrow window):
 
 - **App store:** lists every `.AppImage` from the folders `AppCatalogue` and `AppCatalogue/OSINT` of the GitHub repository (by default `wasabicover258/Flipper-Emulator`, another repository can be tried with `?repo=owner/name` behind the page address). Click **Install** and the app is downloaded by your PC, checked (it must be a type-2 AppImage built for ARM64) and installed into Flipper OS; it then shows up under **Apps**. Installed apps show **installed** and a **Remove** button, a changed file on GitHub shows **Update**, and apps built for a PC (x86-64) are marked **PC only** and cannot be installed. The list is a scrollable window of its own with a search field and the filters *All*, *Apps*, *OSINT* and *Not installed*; it loads 60 rows at a time, so hundreds of apps stay fast and the page keeps its layout.
 - **Offline and outages:** if GitHub does not answer, the panel first tries a mirror (jsDelivr) and otherwise shows the list saved last time, together with a message that says whether it is a temporary GitHub problem, your internet connection or a missing folder, the same wording as in the troubleshooting table.
@@ -115,7 +116,7 @@ Since 11.6 the File Manager has a **side panel** next to your files (below your 
 
 ## Quick Start
 
-1. **Download** `FlipperEmulator 11.6.exe` from the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) (or from the `Public Releases` folder). If you prefer a plain script, `FlipperEmulator 11.5.bat` does the same, but it cannot install or update itself.
+1. **Download** `FlipperEmulator 12.0.exe` from the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) (or from the `Public Releases` folder). If you prefer a plain script, `FlipperEmulator 12.0.bat` does the same, but it cannot install or update itself.
 2. **Double-click** the file. On the first start it asks whether to **install** the program:
    - **Yes** - the program is copied to your user folder, gets a Start menu entry, a desktop icon and an entry in **Apps & features**. No administrator rights are needed.
    - **No** - it runs from where it is (portable) and does not ask again.
@@ -672,7 +673,27 @@ As with any script from the internet, **please read it before you run it**.
 
 ---
 
-## Version 11.6 (current release)
+## Version 12.0 (current release)
+
+Version **12.0** is the public release of the 11.6 development build. The program is identical to 11.6, only the version number changed, so everything from 11.6 and earlier is included:
+
+- **App store in the File Manager** for the apps in the repository folders `AppCatalogue` and `AppCatalogue/OSINT`, with search, filters, install, update and remove.
+- **PC microphone for the Flipper One** as a virtual microphone (16 kHz, mono) inside Flipper OS, switched on in the File Manager.
+- **Mic test app** `Mic-Test-1.0-aarch64.AppImage` in the `AppCatalogue` folder.
+- Everything from 11.5 and earlier (clear error messages that say whether a problem is a bug, your PC or a temporary outside problem, in-app updates, colorways, Flipper Zero emulator).
+
+SHA-256 of the release files:
+
+| File | SHA-256 |
+|---|---|
+| `FlipperEmulator 12.0.exe` | `C5A8727EF740BF2589B05F124C353EC8EFD84175C74F303B2889260BB778F928` |
+| `FlipperEmulator 12.0.bat` | `69D80363C0AAA3645526A6B810AEA015D3D150C9C654E8FD389D108F432B0F38` |
+
+`FlipperEmulator 12.0.exe` and `FlipperEmulator 12.0.bat` are the files of the release on the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) and in the `Public Releases` folder.
+
+---
+
+## Version 11.6 (previous release)
 
 Version **11.6** adds an app store and a virtual microphone to the File Manager. It includes everything from 11.5:
 

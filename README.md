@@ -1,22 +1,25 @@
-# Flipper Emulator for Windows
+# Flipper Emulator for Windows and Linux
 
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%2F%2011-0078D6)
+![Linux](https://img.shields.io/badge/platform-Linux%20(x86__64%20%2F%20ARM64)-FCC624)
 ![Requires](https://img.shields.io/badge/requires-WSL%202-blue)
 ![Status](https://img.shields.io/badge/status-unofficial-orange)
-![Version](https://img.shields.io/badge/public_release-12.2-brightgreen)
+![Version](https://img.shields.io/badge/public_release-13.7-brightgreen)
 
 Try the **Flipper One** user interface and emulate the **Flipper Zero** on any Windows PC - no device, no extra hardware, no manual setup.
 
-Download `FlipperEmulator 12.2.exe`, double-click it and (if you like) let it install itself like a normal program: it gets its own icon on the desktop and in the Start menu. The app then downloads everything it needs, sets up an isolated Linux environment and opens a window in which you choose between three Flipper One modes and a separate **Flipper Zero emulator**:
+On Windows, download `FlipperEmulator 13.7.exe`, double-click it and (if you like) let it install itself like a normal program: it gets its own icon on the desktop and in the Start menu. The app then downloads everything it needs, sets up an isolated Linux environment and opens a window in which you choose between three Flipper One modes and a separate **Flipper Zero emulator**:
 
 - **FlipCTL preview** - the fast, stable test UI from the Flipper One image. Hardware features are simulated.
 - **Real Flipper OS** - the actual Flipper OS kernel and initramfs, booted in QEMU (aarch64) on your PC. Experimental.
 - **Flipper OS + File Manager** - starts both and opens the OS and the file/app shelf in two browser tabs. Upload files from Windows, install your own Flipper app bundles and launch them under **Apps**.
 - **Flipper Zero emulator** - runs the real Flipper Zero firmware (STM32WB55) in Renode and shows it in a window that looks and works like the qFlipper desktop app: live screen with D-pad and keys, device information and a **file manager for the emulated SD card** (upload, download, rename, delete, new folders, backup and restore). It runs at real Flipper Zero speed, so a normal click is a short press and only a held key is a long press.
 
+**New in 13.x: Linux (experimental).** The same app now also runs on Linux (tested on Kali; Debian, Ubuntu, Arch and others, x86_64 and ARM64): same window, same buttons, same functions. Download the `.AppImage` for your PC and double-click it, and from then on it opens from its desktop icon like on Windows. See [Linux](#linux).
+
 New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, Desert, EVA-01, Moss), install the app as a **real program** with an icon, let the **Check for updates** button fetch new versions from GitHub, and use the **Community & Feedback** button to report bugs, share ideas, ask questions or show what you built.
 
-> **Stable helper, experimental emulation:** 12.2 is the current release of this Windows helper. On top of the program (`.exe`), colorways and in-app updates from 10.x it adds the **Community & Feedback** button: a direct way to write to the project on GitHub. It keeps everything from 9.1 (qFlipper-style Flipper Zero window), 8.0 (redesigned app window, one-click **Uninstall Everything**), 7.11 (real-time Flipper Zero emulation) and 6.6 (app shelf, factory reset). Earlier releases remain available as `.bat` files. The real-OS mode itself remains experimental because QEMU emulates hardware the image was not built for.
+> **Stable helper, experimental emulation:** 13.7 is the current release. It brings the Linux version, finds the newest Flipper OS image by itself and reads the root file system of the image directly, so newer Flipper OS builds start again (see [Version 13.7](#version-137-current-release)). The Windows app is otherwise unchanged from 12.2: on top of the program (`.exe`), colorways and in-app updates from 10.x it adds the **Community & Feedback** button: a direct way to write to the project on GitHub. It keeps everything from 9.1 (qFlipper-style Flipper Zero window), 8.0 (redesigned app window, one-click **Uninstall Everything**), 7.11 (real-time Flipper Zero emulation) and 6.6 (app shelf, factory reset). Earlier releases remain available as `.bat` files. The real-OS mode itself remains experimental because QEMU emulates hardware the image was not built for.
 
 > **Disclaimer:** This is an unofficial community project. It is **not** affiliated with or endorsed by Flipper Devices or GitHub. This repository contains no Flipper software - the helper only downloads publicly available components from their official sources.
 <img width="2400" height="1727" alt="flipper-emulator-collage" src="https://github.com/user-attachments/assets/5024e474-8151-4218-94f6-6b1eb5357a43" />
@@ -47,7 +50,10 @@ New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, 
 - [Troubleshooting](#troubleshooting)
 - [Limitations](#limitations)
 - [Security Note](#security-note)
-- [Version 12.2 (current release)](#version-122-current-release)
+- [Linux](#linux)
+- [Version 13.7 (current release)](#version-137-current-release)
+- [Version 13.0 (development build)](#version-130-development-build)
+- [Version 12.2 (previous release)](#version-122-previous-release)
 - [Version 12.1 (previous release)](#version-121-previous-release)
 - [Version 11.5 (previous release)](#version-115-previous-release)
 - [Version 11.4 (previous release)](#version-114-previous-release)
@@ -118,7 +124,7 @@ The File Manager looks like the qFlipper desktop app (black window, amber frame,
 
 ## Quick Start
 
-1. **Download** `FlipperEmulator 12.2.exe` from the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) (or from the `Public Releases` folder). If you prefer a plain script, `FlipperEmulator 12.2.bat` does the same, but it cannot install or update itself.
+1. **Download** `FlipperEmulator 13.7.exe` from the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) (or from the `Public Releases` folder). If you prefer a plain script, `FlipperEmulator 13.7.bat` does the same, but it cannot install or update itself.
 2. **Double-click** the file. On the first start it asks whether to **install** the program:
    - **Yes** - the program is copied to your user folder, gets a Start menu entry, a desktop icon and an entry in **Apps & features**. No administrator rights are needed.
    - **No** - it runs from where it is (portable) and does not ask again.
@@ -678,7 +684,105 @@ As with any script from the internet, **please read it before you run it**.
 
 ---
 
-## Version 12.2 (current release)
+## Linux
+
+Since version **13.0** Flipper Emulator also runs on Linux. The window, the pages, the buttons and every function are the same as on Windows: Flipper One (FlipCTL preview, real Flipper OS, File Manager, colorways), Flipper Zero emulator with the qFlipper-style window, Community & Feedback, Check for updates and Uninstall Everything.
+
+### Install
+
+**Easiest: the AppImage.**
+
+1. Download the AppImage for your PC from the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases): `FlipperEmulator-13.7-x86_64.AppImage` for normal PCs and laptops, `FlipperEmulator-13.7-aarch64.AppImage` for ARM64 devices.
+2. Make it executable (right-click > Properties > Permissions > *Allow executing*, or `chmod +x FlipperEmulator-13.7-*.AppImage`) and **double-click** it.
+3. A **setup window** shows each step. It asks **once for your password** (sudo) to install the system packages the app needs (Mono, QEMU, zstd, bubblewrap, Python, ...) and a small administrator helper, then installs Flipper Emulator for your user and puts a **Flipper Emulator** icon on the desktop and in the application menu.
+4. The app window opens. From now on, start it from the icon - one click, everything opens, exactly like on Windows. Double-clicking the AppImage again simply opens the installed app (or updates it if the AppImage is newer).
+
+**Alternative: the installer script.** Download `FlipperEmulator 13.7.sh` and start it once:
+
+```bash
+cd ~/Downloads
+bash "FlipperEmulator 13.7.sh"
+```
+
+It shows the same setup window (`--text` shows the setup in the terminal instead). Run the AppImage or the installer as your normal user, not as root and not with `sudo` in front.
+
+### Supported systems
+
+| | |
+|---|---|
+| **Distributions** | Debian, Ubuntu, Kali and other apt-based systems (main target); Arch (pacman), Fedora (dnf) and openSUSE (zypper) are supported on a best-effort basis. |
+| **Architectures** | x86_64 and aarch64 (ARM64). |
+| **Desktop** | Any X11 or Wayland desktop (the window uses XWayland on Wayland). |
+| **Account** | A normal user account with sudo rights (the first user on Kali, Ubuntu and Debian has them). |
+| **Disk space, RAM, internet** | Same as on Windows. |
+
+### What is different on Linux (under the hood only)
+
+| Windows | Linux |
+|---|---|
+| Program file `FlipperEmulator 13.7.exe` | `FlipperEmulator-13.7-x86_64.AppImage` / `-aarch64.AppImage` or `FlipperEmulator 13.7.sh` (installer) - the program itself is a Mono/.NET build of the same window code |
+| `%LOCALAPPDATA%\FlipperOneDemo` | `~/.local/share/FlipperOneDemo` |
+| PC file backup `%LOCALAPPDATA%\FlipperOneDemoFiles` | `~/.local/share/FlipperOneDemoFiles` |
+| Private WSL environment "FlipperOne" | No WSL needed. The FlipCTL preview runs in a private **bubblewrap** sandbox (its own "root", its own processes, no access to your Wi-Fi, services, sound or devices). The Flipper Zero emulator (Renode) runs directly in `~/.local/share/FlipperOneDemo/flipper-zero-emulator`. |
+| Portable QEMU | QEMU from the package sources of your distribution |
+| Edge or Chrome as hidden device renderer | Chromium, Chrome or Edge (installed automatically on Debian/Kali/Arch if available) |
+| One-time Windows prompt to enable WSL | One-time password prompt for the packages and the administrator helper |
+| Start menu entries | Application menu entries (`~/.local/share/applications`) |
+| Segoe UI font | Selawik (Microsoft's open-source font with the same metrics) |
+
+**The administrator helper** (`/usr/local/lib/flipper-emulator/flipper-root`) is the only part that runs as root. sudo allows it without a password for your user only (`/etc/sudoers.d/flipper-emulator-<user>`). It can do exactly the things that need root inside WSL on Windows: open your own Flipper OS image (`~/.local/share/FlipperOneDemo/realos/flipper-os.img`) to copy the preview out of it or to add the network profile, the File Manager and the colorway, back up / restore your File Manager files, and install the needed packages. The image is mounted `nosuid,nodev` in a folder only root can enter, links inside the image that point out of it are refused, and everything read from or written to your folders is done with your own rights. If the helper is missing or outdated, the app asks for your password once in a small window. **Uninstall Everything** removes the helper and its sudo rule again; the system packages stay installed (like WSL stays on Windows).
+
+**Updates:** *Check for updates* looks for a file named `FlipperEmulator*.sh` in the latest GitHub release. Attach the `.sh` file to a release (next to the `.exe`) so Linux users get the update in the app.
+
+**Source:** the Linux build is generated from the Windows `.bat` (window code, scripts, pictures). Its own source code is included inside the `.sh` file (`source/linux-source.tar.gz` in the program folder `~/.local/share/flipper-emulator`).
+
+---
+
+## Version 13.7 (current release)
+
+Version **13.7** is the first public release with the **Linux version** and fixes the start of the real Flipper OS with newer images:
+
+- **Linux (experimental, tested on Kali):** the same app as on Windows, as an **AppImage** for x86_64 and ARM64 (double-click, done) or as the installer `FlipperEmulator 13.7.sh`. A setup window shows every step and asks once for the password; the app gets a desktop icon and a menu entry. Dialogs scale correctly on high-resolution screens. Details in [Linux](#linux).
+- **Newest Flipper OS image is found automatically (Windows and Linux):** the Flipper OS image is a nightly build, and old builds are deleted from the download server after a while. Older versions of Flipper Emulator used a fixed build number and stopped with *404* once that build was gone. 13.7 reads the build list of the server and downloads the newest build; the known address is only the last resort.
+- **Newer Flipper OS builds start again (Windows and Linux):** every image build has a different ID for its root file system. Older versions had this ID fixed in the program, so with a newer image the kernel never found its file system and the start kept waiting for 7 minutes. 13.7 reads the ID directly from the image.
+- **Windows:** apart from these two fixes, the Windows app is unchanged from 12.2.
+
+**Coming from an older version and the real Flipper OS does not start?** Update to 13.7 and use **Reinstall** once, so a fresh image is downloaded.
+
+SHA-256 of the release files:
+
+| File | SHA-256 |
+|---|---|
+| `FlipperEmulator 13.7.exe` | `E33EC366CE9E4F2629EF6FC4AD6B45605251BE5C90770ABEBC0ECE1C0FCC8735` |
+| `FlipperEmulator 13.7.bat` | `598C37FDFCBE6CC9F759C79A175F276E63FFCCA939CDA51C7377FC25DA2018E5` |
+| `FlipperEmulator 13.7.sh` | `38000B4A48BB37A0620BCB8255217F0E2C5DDAC6D45E54D0E8C1567C8AAB824A` |
+| `FlipperEmulator-13.7-x86_64.AppImage` | `AA1244A56FB05D5BFFC2AE3AB281A78CCBFB5206556366D90F24177D9D83B9A8` |
+| `FlipperEmulator-13.7-aarch64.AppImage` | `7F01B7C6BBE04A5664CE2551E2EA3D52D72215032E3F93AEAD346ABA4BB7718C` |
+
+The files are attached to the release on the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) and are in `DevBuilds/FlipperEmulator 13.7`.
+
+---
+
+## Version 13.0 (development build)
+
+Version **13.0** brings Flipper Emulator to **Linux** and keeps the Windows version unchanged:
+
+- **Windows:** `FlipperEmulator 13.0.exe` and `FlipperEmulator 13.0.bat` are the same as 12.2 - only the version number changed.
+- **Linux (new):** `FlipperEmulator 13.0.sh` installs the same app on Linux (x86_64 and ARM64): same window and look (fade between the dark Flipper One and the light Flipper Zero theme), same actions, same activity log and the same explanations when something fails. Desktop icon and menu entry, one click to start. Details in [Linux](#linux).
+
+SHA-256 of the files:
+
+| File | SHA-256 |
+|---|---|
+| `FlipperEmulator 13.0.exe` | `442F918A7C77DA89FA17B07B0CE4528A5A83B84F527DA6BEB959F79D3A1C2263` |
+| `FlipperEmulator 13.0.bat` | `569CACFB177C42D8992A47B7BF6D1E419809A86A89DBF4ADB26570275886D787` |
+| `FlipperEmulator 13.0.sh` | `977A607FA93C66D870468962C157DF5C117343164BB74141782B18CE4B5CF7A2` |
+
+The three files are in `DevBuilds/FlipperEmulator 13.0`.
+
+---
+
+## Version 12.2 (previous release)
 
 Version **12.2** adds two things to the File Manager and keeps everything from 12.1:
 

@@ -21,6 +21,8 @@ New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, 
 
 > **Stable helper, experimental emulation:** 13.7 is the current release. It brings the Linux version, finds the newest Flipper OS image by itself and reads the root file system of the image directly, so newer Flipper OS builds start again (see [Version 13.7](#version-137-current-release)). The Windows app is otherwise unchanged from 12.2: on top of the program (`.exe`), colorways and in-app updates from 10.x it adds the **Community & Feedback** button: a direct way to write to the project on GitHub. It keeps everything from 9.1 (qFlipper-style Flipper Zero window), 8.0 (redesigned app window, one-click **Uninstall Everything**), 7.11 (real-time Flipper Zero emulation) and 6.6 (app shelf, factory reset). Earlier releases remain available as `.bat` files. The real-OS mode itself remains experimental because QEMU emulates hardware the image was not built for.
 
+> **Security update 13.8 (development build):** 13.8 fixes the points of a security review: the local web services refuse requests from other web sites, the Flipper Zero emulator no longer listens on the network, downloads are checked against the checksums or signatures their publishers provide, the Linux administrator helper only allows its exact commands and the PowerShell start no longer uses `Invoke-Expression`. Everything looks and works the same for you. Details in [Version 13.8](#version-138-development-build-security-update) and in [SECURITY.md](SECURITY.md).
+
 > **Disclaimer:** This is an unofficial community project. It is **not** affiliated with or endorsed by Flipper Devices or GitHub. This repository contains no Flipper software - the helper only downloads publicly available components from their official sources.
 <img width="2400" height="1727" alt="flipper-emulator-collage" src="https://github.com/user-attachments/assets/5024e474-8151-4218-94f6-6b1eb5357a43" />
 
@@ -51,6 +53,7 @@ New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, 
 - [Limitations](#limitations)
 - [Security Note](#security-note)
 - [Linux](#linux)
+- [Version 13.8 (development build, security update)](#version-138-development-build-security-update)
 - [Version 13.7 (current release)](#version-137-current-release)
 - [Version 13.0 (development build)](#version-130-development-build)
 - [Version 12.2 (previous release)](#version-122-previous-release)
@@ -371,6 +374,8 @@ The backup is a safety copy, not a live sync service: changes made while the rea
 
 The File Manager page uses `http://127.0.0.1:8898/` by default. The FlipCTL preview uses `http://127.0.0.1:8899/`. The real OS uses a block of ten local ports that depends on the colorway: Stock 8910-8919, Snow 8920-8929, Desert 8930-8939, EVA-01 8940-8949, Moss 8950-8959 (the first free port of the block is used). If a port is busy, the helper picks the next free one and opens the correct address automatically. Both services listen on **localhost only**; nothing is exposed to your local network. The upload endpoint checks the target path, rejects traversal attempts and writes files atomically. The install endpoint validates the AppImage header and only writes into `/home/user/Apps`.
 
+Since 13.8 other web sites that are open in your browser cannot use the File Manager in the background: every change (upload, rename, delete, install, microphone) needs a secret that only the File Manager page itself carries, requests with a foreign origin are refused, and files from the Flipper OS are never shown as active web pages. If the page says it is outdated (after the OS was restarted), simply reload it.
+
 ---
 
 ## Unofficial App Shelf
@@ -410,7 +415,7 @@ To build a compatible bundle, use the Flipper OS app bundler (`tools/appimage/bu
 
 An installed bundle runs as code inside the emulated Flipper OS. The header check only verifies the format, not that the app is safe or works. **Only install bundles you trust.**
 
-- The shelf does not download apps from the internet; it only installs files you put into the File Manager.
+- The shelf itself only installs files you put into the File Manager. Apps from the built-in app store (AppCatalogue) are checked against the checksum in the repository before they are installed (13.8); apps you import yourself need a confirmation.
 - GNU/Linux binaries built for x86, `.deb` packages and plain scripts are not supported.
 - Removing an app deletes only its bundle. The app's work data under `~/.local/share/flipctl/apps/<key>` and its extracted manifest cache under `~/.cache/flipctl/bundles/<key>` may remain inside the image.
 - A full reinstall creates a fresh image. Installed bundles are not part of the PC file backup, so keep the `.AppImage` files in Files and install them again after a reinstall.
@@ -670,17 +675,18 @@ If the problem persists, open an issue and include the output of **[7] Show serv
 
 ## Security Note
 
-The `.exe` is a small launcher that contains the complete helper (the same content as the `.bat`) and starts it; it is not code-signed, so Windows SmartScreen may warn about it. The `.bat` file is plain text. Both launch an embedded PowerShell script with `-ExecutionPolicy Bypass` for that one process only and downloads several large files.
+The full security model, the list of all download checks and how to report a vulnerability privately are in [SECURITY.md](SECURITY.md). In short (13.8):
 
-- Downloads come from official sources: `dl-linux-images.flipp.dev`, `cloud-images.ubuntu.com`, `nodejs.org`, GitHub (`meta/zstd`), `7-zip.org` and `qemu.weilnetz.de`. The Flipper Zero window additionally uses `python.org`, `pypi.org` (PySide6, checked against the published SHA-256) and, only if missing, Microsoft's Visual C++ runtime from `aka.ms`.
-- The 7-Zip MSI is verified with SHA-256. QEMU checksums are verified when the mirror provides them.
-- The preview server, the real-OS port forwarding and the File Manager listen on **localhost only**. The File Manager service runs as the unprivileged guest user `user` and can only change things under `/home/user` (it can read the rest of the file system, as far as the guest user is allowed to). The service answers only to local addresses (`127.0.0.1`, `localhost`).
-- Installed app bundles run as code inside the emulated guest. The shelf verifies the AppImage format and architecture before installing, but that is not a safety or trust check. Only install bundles you trust.
-- **Update check:** the button contacts only `api.github.com` and downloads only from GitHub over HTTPS. The file is verified against the SHA-256 that GitHub publishes for the release before it replaces the program. Nothing is checked or downloaded automatically; it only happens when you press the button.
-- **Feedback:** the Community & Feedback button only opens a GitHub page in your browser. The program sends nothing itself; the version numbers of the program and of Windows are part of the opened web address and visible to you before you submit.
+- **No signing yet:** the `.exe` is a small launcher that contains the complete helper (the same content as the `.bat`) and starts it; it is not code-signed, so Windows SmartScreen may warn about it. Compare the SHA-256 with the table of the version (or `SHA256SUMS.txt` in the build folder). The `.bat` file is plain text; it runs its embedded PowerShell part as a script block of itself (no `Invoke-Expression`) with `-ExecutionPolicy RemoteSigned` for that one process only.
+- **Downloads come from official sources** (`dl-linux-images.flipp.dev`, `cloud-images.ubuntu.com`, `nodejs.org`, GitHub, `7-zip.org`, `qemu.weilnetz.de`, `python.org`, `pypi.org`, Microsoft) and are checked before use: Ubuntu, Node.js and Python against the checksum lists of their publishers, zstd, 7-Zip and the Qt for Python packages against fixed SHA-256 values, QEMU against its SHA-512 file (a missing checksum is now an error), Python and the Visual C++ runtime additionally against their Windows signatures, the Flipper Zero emulator source against a fixed Git commit, firmware against the published SHA-256. A file that fails is deleted and not used.
+- **Local services:** the preview server, the real-OS port forwarding, the File Manager and the Flipper Zero emulator listen on **localhost only**. The File Manager and the preview refuse requests from other web sites (CSRF, DNS rebinding); the monitor of the Flipper Zero emulator answers only to the windows of Flipper Emulator. The File Manager service runs as the unprivileged guest user `user` and can only change things under `/home/user`.
+- **Apps** run as code inside the emulated guest. The shelf verifies format and architecture, and store apps their checksum, but that is not a safety review. Only install apps you trust.
+- **Update check:** contacts only `api.github.com` and downloads only release files of this repository. The file must match the SHA-256 that GitHub publishes, otherwise it is not installed. Nothing is checked or downloaded automatically.
+- **Linux:** the administrator helper may only run its exact list of commands; optionally sudo asks for the password every time (`flipper-emulator --helper-mode password`). See [Linux](#linux).
+- **Feedback:** the Community & Feedback button only opens a GitHub page in your browser. The program sends nothing itself.
 - The helper does not collect telemetry or send data to a cloud service.
 
-As with any script from the internet, **please read it before you run it**.
+As with any program from the internet, **please read it before you run it**.
 
 ---
 
@@ -730,11 +736,37 @@ It shows the same setup window (`--text` shows the setup in the terminal instead
 | Start menu entries | Application menu entries (`~/.local/share/applications`) |
 | Segoe UI font | Selawik (Microsoft's open-source font with the same metrics) |
 
-**The administrator helper** (`/usr/local/lib/flipper-emulator/flipper-root`) is the only part that runs as root. sudo allows it without a password for your user only (`/etc/sudoers.d/flipper-emulator-<user>`). It can do exactly the things that need root inside WSL on Windows: open your own Flipper OS image (`~/.local/share/FlipperOneDemo/realos/flipper-os.img`) to copy the preview out of it or to add the network profile, the File Manager and the colorway, back up / restore your File Manager files, and install the needed packages. The image is mounted `nosuid,nodev` in a folder only root can enter, links inside the image that point out of it are refused, and everything read from or written to your folders is done with your own rights. If the helper is missing or outdated, the app asks for your password once in a small window. **Uninstall Everything** removes the helper and its sudo rule again; the system packages stay installed (like WSL stays on Windows).
+**The administrator helper** (`/usr/local/lib/flipper-emulator/flipper-root`) is the only part that runs as root. Since 13.8 the sudo rule for your user (`/etc/sudoers.d/flipper-emulator-<user>`) allows only its exact commands and arguments, nothing else. By default they run without a password, so the app still opens with one click; if you prefer, `flipper-emulator --helper-mode password` makes sudo ask for your password every time (the app shows a password window), and `flipper-emulator --helper-mode quick` switches back. While the helper works with your image, the image belongs to root and no other program may have it open; afterwards you get it back unchanged. It can do exactly the things that need root inside WSL on Windows: open your own Flipper OS image (`~/.local/share/FlipperOneDemo/realos/flipper-os.img`) to copy the preview out of it or to add the network profile, the File Manager and the colorway, back up / restore your File Manager files, and install the needed packages. The image is mounted `nosuid,nodev` in a folder only root can enter, links inside the image that point out of it are refused, and everything read from or written to your folders is done with your own rights. If the helper is missing or outdated, the app asks for your password once in a small window. **Uninstall Everything** removes the helper and its sudo rule again; the system packages stay installed (like WSL stays on Windows).
 
 **Updates:** *Check for updates* looks for a file named `FlipperEmulator*.sh` in the latest GitHub release. Attach the `.sh` file to a release (next to the `.exe`) so Linux users get the update in the app.
 
 **Source:** the Linux build is generated from the Windows `.bat` (window code, scripts, pictures). Its own source code is included inside the `.sh` file (`source/linux-source.tar.gz` in the program folder `~/.local/share/flipper-emulator`).
+
+---
+
+## Version 13.8 (development build, security update)
+
+Version **13.8** answers a security review of the project. For you everything looks and works the same; on Linux the app asks once more for your password after the update, because the administrator helper is renewed.
+
+- **Local web services (Windows and Linux):** the File Manager accepts changes only with a secret that only its own page carries, refuses requests from other web sites (Origin / Sec-Fetch checks, no CORS, JSON only), shows files from the Flipper OS never as active pages and has a strict Content-Security-Policy. The FlipCTL preview server gets a guard that keeps it on `127.0.0.1` and refuses foreign host names, other web sites and cross-site WebSockets.
+- **Flipper Zero emulator:** Renode opened its monitor (which can run Python) and its console on all network interfaces. A small preload library now keeps them on `127.0.0.1`, and they answer only to the windows of Flipper Emulator (a new secret for every start), so neither the network nor apps inside the emulated Flipper One can use them. The emulator source is downloaded at a fixed, checked commit.
+- **Downloads:** Ubuntu, Node.js, Python, Qt for Python, zstd, QEMU (fail-closed), the Visual C++ runtime and the firmware are checked against published checksums or signatures before use; ZIP archives are unpacked with path checks. Apps from the app store are checked against the repository checksum in the browser, and importing your own app asks for confirmation.
+- **Updates:** only release files of this repository with a published SHA-256 are installed.
+- **Windows start:** the `.bat` no longer uses `Invoke-Expression` and runs with `-ExecutionPolicy RemoteSigned` instead of `Bypass`.
+- **Linux helper:** exact command list in the sudo rule, image locked to root while mounted (nobody else may have it open), one helper at a time, crash recovery, optional password mode.
+- New [SECURITY.md](SECURITY.md) with the security model, all download checks and private vulnerability reporting.
+
+SHA-256 of the build files (also in `SHA256SUMS.txt`):
+
+| File | SHA-256 |
+|---|---|
+| `FlipperEmulator 13.8.exe` | `FC22A773192C85ACD750F69BABA396E0EDA487097264BDB6675B0CADF4785B33` |
+| `FlipperEmulator 13.8.bat` | `9A2393722BD0E4CB9FCAE361764EEE277610805E5A5E91C26F3980D1EFF41942` |
+| `FlipperEmulator 13.8.sh` | `1B516225FC793257189F7DEEEEFF007F1CDE04EFF2911C2C72EAF1C1941E1CB1` |
+| `FlipperEmulator-13.8-x86_64.AppImage` | `A5965E8D9FD8F72817147C0B0EDA51C39E27FEE5236B712CDC9FCD58349C83A9` |
+| `FlipperEmulator-13.8-aarch64.AppImage` | `D9E3807C0BEBD0C204B9A35D9A456B5829AA3B37232BA7A5149FE4D6D202908E` |
+
+The files are in `DevBuilds/FlipperEmulator 13.8`. The Windows part could not be run on a real Windows PC while it was built; please test it once (install, preview, real OS, File Manager, Flipper Zero) before it becomes a release.
 
 ---
 

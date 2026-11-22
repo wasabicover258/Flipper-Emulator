@@ -6,7 +6,8 @@ Flipper Emulator is an unofficial community project. It sets up emulators and do
 
 | Version | Security fixes |
 |---|---|
-| 14.1 (development build) and newer | yes |
+| 14.2 (development build) and newer | yes |
+| 14.1 (development build) | yes |
 | 14.0, 13.8 (development builds) | no - the Windows files do not start, please use 14.1 |
 | 13.7 and older | no - please update |
 
@@ -59,6 +60,7 @@ Archives are unpacked with path checks (no "zip slip").
 
 - The sudo rule (`/etc/sudoers.d/flipper-emulator-<user>`) lists **exactly** the allowed commands and arguments (`version`, `deps`, `install-preview`, `extract-boot`, `guest-net`, `guest-shelf`, `guest-files Export|Import`, `guest-color [key]`, `remove-self`); nothing else can be run through it. The helper checks the number and form of the arguments again.
 - It only works with the calling user's own image `~/.local/share/FlipperOneDemo/realos/flipper-os.img`. The image is opened once and from then on only used through that open file (a swapped path or a link to a system file is refused). While root works with it, the image belongs to root with mode `0600`; if any other program still has it open or mapped, the helper refuses to start. Afterwards the user gets the file back unchanged (also after a crash: the next start repairs it). Only one helper runs at a time.
+- If the image is still open in another program, the helper refuses and names that program (process ID and command); a memory mapping only counts if `/proc/<pid>/map_files` shows the very same file.
 - The image is mounted `nosuid,nodev` in a folder only root can enter, links that point out of the image are refused, and everything read from or written to the user's folders is done with the user's own rights.
 - **Default ("quick" mode):** the listed commands run without a password, so the app keeps working with one click. **Password mode:** `flipper-emulator --helper-mode password` (or `FLIPPER_HELPER_MODE=password` for the installer) makes sudo ask for the password every time the helper is needed; the app shows a password window. `--helper-mode quick` switches back.
 
@@ -72,9 +74,10 @@ Archives are unpacked with path checks (no "zip slip").
 
 ### macOS (since 14.0, experimental)
 
-- `FlipperEmulator-<version>.pkg` is **not signed or notarized** (that needs a paid Apple Developer account). macOS therefore blocks it at the first double-click and you allow it once under *System Settings > Privacy & Security > Open Anyway*. Check the SHA-256 against `SHA256SUMS.txt` first: `shasum -a 256 FlipperEmulator-14.1.pkg`.
+- `FlipperEmulator-<version>.pkg` is **not signed or notarized** (that needs a paid Apple Developer account). macOS therefore blocks it at the first double-click and you allow it once under *System Settings > Privacy & Security > Open Anyway*. Check the SHA-256 against `SHA256SUMS.txt` first: `shasum -a 256 FlipperEmulator-14.2.pkg`.
 - The package contains only the program files (Python code, pictures, fonts, the Linux installer for the virtual machine) and an install script, no Mac programs. The script runs as root during the installation: it downloads Python and Qt for Python with fixed checksums, puts `Flipper Emulator.app` into `/Applications`, a link on the desktop of the logged-in user, and logs every step to `/var/log/flipper-emulator-install.log`. Nothing is installed as a background service.
 - The Linux parts run in a private Ubuntu virtual machine ("flipperone") managed by Multipass, the Mac counterpart of WSL. The app talks to it only over SSH with its own key (`~/Library/Application Support/FlipperOneDemo/vm/id_ed25519`, created on the Mac) and forwards the local ports to `127.0.0.1` on the Mac. The virtual machine's network is only reachable from this Mac. Inside it the same Linux version of Flipper Emulator runs with all protections listed above.
+- To clean up after an interrupted run, the app stops its own unfinished actions and the administrator helper inside the virtual machine (as the VM's default user `ubuntu`, which has administrator rights there) and may restart the virtual machine once. Nothing on the Mac itself is touched.
 - Multipass needs administrator rights once (macOS password dialog) and stays installed after *Uninstall Everything*, like WSL on Windows.
 
 ### Known limits

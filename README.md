@@ -1,7 +1,8 @@
-# Flipper Emulator for Windows and Linux
+# Flipper Emulator for Windows, Linux and macOS
 
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%2F%2011-0078D6)
 ![Linux](https://img.shields.io/badge/platform-Linux%20(x86__64%20%2F%20ARM64)-FCC624)
+![macOS](https://img.shields.io/badge/platform-macOS%2014%2B%20(experimental)-999999)
 ![Requires](https://img.shields.io/badge/requires-WSL%202-blue)
 ![Status](https://img.shields.io/badge/status-unofficial-orange)
 ![Version](https://img.shields.io/badge/public_release-13.7-brightgreen)
@@ -15,11 +16,15 @@ On Windows, download `FlipperEmulator 13.7.exe`, double-click it and (if you lik
 - **Flipper OS + File Manager** - starts both and opens the OS and the file/app shelf in two browser tabs. Upload files from Windows, install your own Flipper app bundles and launch them under **Apps**.
 - **Flipper Zero emulator** - runs the real Flipper Zero firmware (STM32WB55) in Renode and shows it in a window that looks and works like the qFlipper desktop app: live screen with D-pad and keys, device information and a **file manager for the emulated SD card** (upload, download, rename, delete, new folders, backup and restore). It runs at real Flipper Zero speed, so a normal click is a short press and only a held key is a long press.
 
+**New in 14.0: macOS (experimental, development build).** Download `FlipperEmulator-14.0.pkg`, double-click it and the installer puts Flipper Emulator into *Applications* with an icon on your desktop - same window, same buttons, same functions. See [macOS](#macos).
+
 **New in 13.x: Linux (experimental).** The same app now also runs on Linux (tested on Kali; Debian, Ubuntu, Arch and others, x86_64 and ARM64): same window, same buttons, same functions. Download the `.AppImage` for your PC and double-click it, and from then on it opens from its desktop icon like on Windows. See [Linux](#linux).
 
 New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, Desert, EVA-01, Moss), install the app as a **real program** with an icon, let the **Check for updates** button fetch new versions from GitHub, and use the **Community & Feedback** button to report bugs, share ideas, ask questions or show what you built.
 
 > **Stable helper, experimental emulation:** 13.7 is the current release. It brings the Linux version, finds the newest Flipper OS image by itself and reads the root file system of the image directly, so newer Flipper OS builds start again (see [Version 13.7](#version-137-current-release)). The Windows app is otherwise unchanged from 12.2: on top of the program (`.exe`), colorways and in-app updates from 10.x it adds the **Community & Feedback** button: a direct way to write to the project on GitHub. It keeps everything from 9.1 (qFlipper-style Flipper Zero window), 8.0 (redesigned app window, one-click **Uninstall Everything**), 7.11 (real-time Flipper Zero emulation) and 6.6 (app shelf, factory reset). Earlier releases remain available as `.bat` files. The real-OS mode itself remains experimental because QEMU emulates hardware the image was not built for.
+
+> **Development build 14.0 (macOS):** 14.0 adds a macOS version (one `.pkg` file, macOS 14 or newer, Apple silicon and Intel). Windows and Linux are unchanged from 13.8. The Mac version could not be tested on a real Mac yet - testers are very welcome. Details in [macOS](#macos) and [Version 14.0](#version-140-development-build-macos).
 
 > **Security update 13.8 (development build):** 13.8 fixes the points of a security review: the local web services refuse requests from other web sites, the Flipper Zero emulator no longer listens on the network, downloads are checked against the checksums or signatures their publishers provide, the Linux administrator helper only allows its exact commands and the PowerShell start no longer uses `Invoke-Expression`. Everything looks and works the same for you. Details in [Version 13.8](#version-138-development-build-security-update) and in [SECURITY.md](SECURITY.md).
 
@@ -53,6 +58,8 @@ New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, 
 - [Limitations](#limitations)
 - [Security Note](#security-note)
 - [Linux](#linux)
+- [macOS](#macos)
+- [Version 14.0 (development build, macOS)](#version-140-development-build-macos)
 - [Version 13.8 (development build, security update)](#version-138-development-build-security-update)
 - [Version 13.7 (current release)](#version-137-current-release)
 - [Version 13.0 (development build)](#version-130-development-build)
@@ -741,6 +748,78 @@ It shows the same setup window (`--text` shows the setup in the terminal instead
 **Updates:** *Check for updates* looks for a file named `FlipperEmulator*.sh` in the latest GitHub release. Attach the `.sh` file to a release (next to the `.exe`) so Linux users get the update in the app.
 
 **Source:** the Linux build is generated from the Windows `.bat` (window code, scripts, pictures). Its own source code is included inside the `.sh` file (`source/linux-source.tar.gz` in the program folder `~/.local/share/flipper-emulator`).
+
+---
+
+## macOS
+
+Since version **14.0** Flipper Emulator also runs on the Mac (experimental). The window, the pages, the buttons and every function are the same as on Windows and Linux: Flipper One (FlipCTL preview, real Flipper OS, File Manager, colorways), Flipper Zero emulator with the qFlipper-style window, Community & Feedback, Check for updates and Uninstall Everything.
+
+> **Status:** the Mac version was built and tested on Linux (simulated installer, fake virtual machine) but **not yet on a real Mac**. If you try it, please report what happened under **Community & Feedback** - also when it works. The installer log is `/var/log/flipper-emulator-install.log`.
+
+### Install
+
+1. Download `FlipperEmulator-14.0.pkg` from the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) (or from `DevBuilds/FlipperEmulator 14.0`).
+2. **Double-click** it. Because the installer is not signed with a paid Apple developer account, macOS first says that it cannot check the file. Click **Done** (not *Move to Trash*), open **System Settings > Privacy & Security**, scroll down to *"FlipperEmulator-14.0.pkg" was blocked* and click **Open Anyway**, then confirm with your password or Touch ID. You only do this once per download. (On macOS 14 Sonoma, right-click the file > **Open** works as well.)
+3. The installer opens: **Continue**, **Install**, enter your Mac password. It downloads the runtime it needs (about 140 MB, every file checked with SHA-256), puts **Flipper Emulator** into *Applications* and an icon on your **desktop**, and opens the app.
+4. On the first start the app sets up **Multipass** (free, by Canonical), the Mac counterpart of WSL: it downloads it (about 160 MB), checks it, and macOS asks **once for your password**.
+5. Press **Start** like on Windows. The first start creates the private Linux environment (Ubuntu, about 600 MB) and downloads the Flipper parts. From then on everything starts from the desktop icon with one click.
+
+### Requirements
+
+| | |
+|---|---|
+| **macOS** | 14 Sonoma or newer (15 Sequoia, 26 Tahoe) |
+| **Mac** | Apple silicon (M1 or newer) or Intel with virtualization |
+| **RAM** | 8 GB or more recommended (the Linux environment gets 3-6 GB, depending on the Mac) |
+| **Disk space** | about 15 GB free (the Linux environment grows as needed, up to 40 GB) |
+| **Internet** | needed for the installation and the first start |
+
+### What is different on the Mac (under the hood only)
+
+| Windows | macOS |
+|---|---|
+| Program file `FlipperEmulator 14.0.exe` | Installer `FlipperEmulator-14.0.pkg`; the program is `/Applications/Flipper Emulator.app` (a Python/Qt port of the same window) |
+| Private WSL environment "FlipperOne" | Private Ubuntu virtual machine **"flipperone"** in Multipass. The tested Linux version of Flipper Emulator runs inside it and does the work; the window on the Mac controls it over SSH (own key) and forwards the ports to `127.0.0.1` on the Mac, so the pages open in your browser exactly like on Windows. |
+| `%LOCALAPPDATA%\FlipperOneDemo` | `~/Library/Application Support/FlipperOneDemo` |
+| PC file backup `%LOCALAPPDATA%\FlipperOneDemoFiles` | Mac file backup `~/Library/Application Support/FlipperOneDemo/share/FlipperOneDemoFiles` (shared folder of the Linux environment) |
+| Flipper Zero window (Python/Qt on Windows) | The same window runs natively on the Mac and reaches the emulated SD card through the Linux environment |
+| One-time Windows prompt to enable WSL | One-time macOS password dialog to install Multipass |
+| Start menu entries | Applications folder, Launchpad and the desktop icon |
+
+**Updates:** *Check for updates* looks for a file named `FlipperEmulator*.pkg` in the latest GitHub release, checks its SHA-256 and opens the new installer. Attach the `.pkg` to a release (next to the `.exe` and the `.sh`) so Mac users get the update in the app.
+
+**Uninstall:** **Uninstall Everything** removes the Linux environment, all data, the program and the desktop icon (macOS asks for your password to remove the program). Multipass stays installed, like WSL on Windows; to remove it too, run `sudo sh "/Library/Application Support/com.canonical.multipass/uninstall.sh"` in the Terminal.
+
+**Why "Open Anyway"?** Apple only lets installers open without a warning if they are signed and notarized with a paid Apple Developer account. This community project does not have one. You can check the file yourself: `shasum -a 256 ~/Downloads/FlipperEmulator-14.0.pkg` must show the checksum from `SHA256SUMS.txt`. Everything the installer and the app download is pinned to an exact checksum, and Multipass is only installed if it carries Canonical's Apple signature (details in [SECURITY.md](SECURITY.md)).
+
+**Source:** the Mac app (Python), the install script and the build tools are in `FlipperEmulator 14.0 macOS source.zip` next to the installer; the package itself is built on Linux without Mac tools.
+
+---
+
+## Version 14.0 (development build, macOS)
+
+Version **14.0** adds the **macOS version**. Windows and Linux work exactly like in 13.8.
+
+- **macOS installer** `FlipperEmulator-14.0.pkg`: one file, double-click, the program lands in *Applications* with a desktop icon and opens by itself. It installs Python 3.12 and Qt for Python for the app (pinned checksums) and nothing in the background.
+- **Same window on the Mac:** the app window, the Flipper One modes, colorways, File Manager, Flipper Zero emulator with its qFlipper-style window, Community & Feedback, Check for updates and Uninstall Everything - 1:1 like on Windows.
+- **Private Linux environment via Multipass**, set up automatically on the first start (one macOS password dialog), the Mac counterpart of WSL.
+- **Linux build:** gets a hidden "headless" mode that the Mac uses inside its Linux environment. Nothing changes for Linux users.
+- [SECURITY.md](SECURITY.md) describes the Mac installer and its download checks.
+
+SHA-256 of the build files (also in `SHA256SUMS.txt`):
+
+| File | SHA-256 |
+|---|---|
+| `FlipperEmulator 14.0.exe` | `DB4693E70613F0530F7C8EA59E0F54307B32054F71E820EC36C6DC4030824ABB` |
+| `FlipperEmulator 14.0.bat` | `C3902B7E5847C5A66CDCD48ADEB39F069318D6BA46186EB9B14657FED4577DD0` |
+| `FlipperEmulator 14.0.sh` | `0DCE5E7E3F53A63BE45208BCAFED96C0CB55CA2D3FEF6C593229F304805E9588` |
+| `FlipperEmulator-14.0-x86_64.AppImage` | `E85F306B8F19E12FA9D3928A6EBC53F8E62816F023815D1517C2C3F69AA7E178` |
+| `FlipperEmulator-14.0-aarch64.AppImage` | `DACAC12E47ED8C19543770BD84722C168A16324B71AEFE8FC08520D077ED74F7` |
+| `FlipperEmulator-14.0.pkg` | `6FA4BEC1A2C73A34AB86D75368A307A83245D48F7782625EDDA5743C3A4362CB` |
+| `FlipperEmulator 14.0 macOS source.zip` | `79BE8003F16A92AE3635BA27F874554029E0436C309022A1A81DD1DD240A7FE2` |
+
+The files are in `DevBuilds/FlipperEmulator 14.0`. The Mac version could not be tested on a real Mac while it was built; please test it once (install, preview, real OS, File Manager, Flipper Zero, Uninstall Everything) before it becomes a release.
 
 ---
 

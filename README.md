@@ -16,7 +16,7 @@ On Windows, download `FlipperEmulator 13.7.exe`, double-click it and (if you lik
 - **Flipper OS + File Manager** - starts both and opens the OS and the file/app shelf in two browser tabs. Upload files from Windows, install your own Flipper app bundles and launch them under **Apps**.
 - **Flipper Zero emulator** - runs the real Flipper Zero firmware (STM32WB55) in Renode and shows it in a window that looks and works like the qFlipper desktop app: live screen with D-pad and keys, device information and a **file manager for the emulated SD card** (upload, download, rename, delete, new folders, backup and restore). It runs at real Flipper Zero speed, so a normal click is a short press and only a held key is a long press.
 
-**New in 14.x: macOS (experimental, development build).** Download `FlipperEmulator-14.2.pkg`, double-click it and the installer puts Flipper Emulator into *Applications* with an icon on your desktop - same window, same buttons, same functions. See [macOS](#macos).
+**New in 14.x: macOS (experimental, development build).** Download `FlipperEmulator-14.3.pkg`, double-click it and the installer puts Flipper Emulator into *Applications* with an icon on your desktop - same window, same buttons, same functions. See [macOS](#macos).
 
 **New in 13.x: Linux (experimental).** The same app now also runs on Linux (tested on Kali; Debian, Ubuntu, Arch and others, x86_64 and ARM64): same window, same buttons, same functions. Download the `.AppImage` for your PC and double-click it, and from then on it opens from its desktop icon like on Windows. See [Linux](#linux).
 
@@ -24,7 +24,7 @@ New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, 
 
 > **Stable helper, experimental emulation:** 13.7 is the current release. It brings the Linux version, finds the newest Flipper OS image by itself and reads the root file system of the image directly, so newer Flipper OS builds start again (see [Version 13.7](#version-137-current-release)). The Windows app is otherwise unchanged from 12.2: on top of the program (`.exe`), colorways and in-app updates from 10.x it adds the **Community & Feedback** button: a direct way to write to the project on GitHub. It keeps everything from 9.1 (qFlipper-style Flipper Zero window), 8.0 (redesigned app window, one-click **Uninstall Everything**), 7.11 (real-time Flipper Zero emulation) and 6.6 (app shelf, factory reset). Earlier releases remain available as `.bat` files. The real-OS mode itself remains experimental because QEMU emulates hardware the image was not built for.
 
-> **Development build 14.2:** makes the real Flipper OS start reliably on the Mac and on Linux after an interrupted run (see [Version 14.2](#version-142-development-build-real-flipper-os-fix)) and contains the Windows fix of 14.1 (13.8 and 14.0 did not open on Windows). It contains the macOS version from 14.0 (one `.pkg` file, macOS 14 or newer, Apple silicon and Intel), which has meanwhile started successfully on a first real Mac. Details in [macOS](#macos).
+> **Development build 14.3:** fixes the real Flipper OS and the preview setup on Linux and on the Mac, which stopped with *"image is still open in another program"* since 13.8 (see [Version 14.3](#version-143-development-build-image-check-fix)) and contains the Windows fix of 14.1 (13.8 and 14.0 did not open on Windows). It contains the macOS version from 14.0 (one `.pkg` file, macOS 14 or newer, Apple silicon and Intel), which has meanwhile started successfully on a first real Mac. Details in [macOS](#macos).
 
 > **Security update 13.8 (development build):** 13.8 fixes the points of a security review: the local web services refuse requests from other web sites, the Flipper Zero emulator no longer listens on the network, downloads are checked against the checksums or signatures their publishers provide, the Linux administrator helper only allows its exact commands and the PowerShell start no longer uses `Invoke-Expression`. Everything looks and works the same for you. Details in [Version 13.8](#version-138-development-build-security-update) and in [SECURITY.md](SECURITY.md).
 
@@ -59,6 +59,7 @@ New in 10.x and 11.x: choose the **colorway** of your Flipper One (Stock, Snow, 
 - [Security Note](#security-note)
 - [Linux](#linux)
 - [macOS](#macos)
+- [Version 14.3 (development build, image check fix)](#version-143-development-build-image-check-fix)
 - [Version 14.2 (development build, real Flipper OS fix)](#version-142-development-build-real-flipper-os-fix)
 - [Version 14.1 (development build, Windows fix)](#version-141-development-build-windows-fix)
 - [Version 14.0 (development build, macOS)](#version-140-development-build-macos)
@@ -761,8 +762,8 @@ Since version **14.0** Flipper Emulator also runs on the Mac (experimental). The
 
 ### Install
 
-1. Download `FlipperEmulator-14.2.pkg` from the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) (or from `DevBuilds/FlipperEmulator 14.2`).
-2. **Double-click** it. Because the installer is not signed with a paid Apple developer account, macOS first says that it cannot check the file. Click **Done** (not *Move to Trash*), open **System Settings > Privacy & Security**, scroll down to *"FlipperEmulator-14.2.pkg" was blocked* and click **Open Anyway**, then confirm with your password or Touch ID. You only do this once per download. (On macOS 14 Sonoma, right-click the file > **Open** works as well.)
+1. Download `FlipperEmulator-14.3.pkg` from the [Releases page](https://github.com/wasabicover258/Flipper-Emulator/releases) (or from `DevBuilds/FlipperEmulator 14.3`).
+2. **Double-click** it. Because the installer is not signed with a paid Apple developer account, macOS first says that it cannot check the file. Click **Done** (not *Move to Trash*), open **System Settings > Privacy & Security**, scroll down to *"FlipperEmulator-14.3.pkg" was blocked* and click **Open Anyway**, then confirm with your password or Touch ID. You only do this once per download. (On macOS 14 Sonoma, right-click the file > **Open** works as well.)
 3. The installer opens: **Continue**, **Install**, enter your Mac password. It downloads the runtime it needs (about 140 MB, every file checked with SHA-256), puts **Flipper Emulator** into *Applications* and an icon on your **desktop**, and opens the app.
 4. On the first start the app sets up **Multipass** (free, by Canonical), the Mac counterpart of WSL: it downloads it (about 160 MB), checks it, and macOS asks **once for your password**.
 5. Press **Start** like on Windows. The first start creates the private Linux environment (Ubuntu, about 600 MB) and downloads the Flipper parts. From then on everything starts from the desktop icon with one click.
@@ -781,7 +782,7 @@ Since version **14.0** Flipper Emulator also runs on the Mac (experimental). The
 
 | Windows | macOS |
 |---|---|
-| Program file `FlipperEmulator 14.2.exe` | Installer `FlipperEmulator-14.2.pkg`; the program is `/Applications/Flipper Emulator.app` (a Python/Qt port of the same window) |
+| Program file `FlipperEmulator 14.3.exe` | Installer `FlipperEmulator-14.3.pkg`; the program is `/Applications/Flipper Emulator.app` (a Python/Qt port of the same window) |
 | Private WSL environment "FlipperOne" | Private Ubuntu virtual machine **"flipperone"** in Multipass. The tested Linux version of Flipper Emulator runs inside it and does the work; the window on the Mac controls it over SSH (own key) and forwards the ports to `127.0.0.1` on the Mac, so the pages open in your browser exactly like on Windows. |
 | `%LOCALAPPDATA%\FlipperOneDemo` | `~/Library/Application Support/FlipperOneDemo` |
 | PC file backup `%LOCALAPPDATA%\FlipperOneDemoFiles` | Mac file backup `~/Library/Application Support/FlipperOneDemo/share/FlipperOneDemoFiles` (shared folder of the Linux environment) |
@@ -793,13 +794,37 @@ Since version **14.0** Flipper Emulator also runs on the Mac (experimental). The
 
 **Uninstall:** **Uninstall Everything** removes the Linux environment, all data, the program and the desktop icon (macOS asks for your password to remove the program). Multipass stays installed, like WSL on Windows; to remove it too, run `sudo sh "/Library/Application Support/com.canonical.multipass/uninstall.sh"` in the Terminal.
 
-**Why "Open Anyway"?** Apple only lets installers open without a warning if they are signed and notarized with a paid Apple Developer account. This community project does not have one. You can check the file yourself: `shasum -a 256 ~/Downloads/FlipperEmulator-14.2.pkg` must show the checksum from `SHA256SUMS.txt`. Everything the installer and the app download is pinned to an exact checksum, and Multipass is only installed if it carries Canonical's Apple signature (details in [SECURITY.md](SECURITY.md)).
+**Why "Open Anyway"?** Apple only lets installers open without a warning if they are signed and notarized with a paid Apple Developer account. This community project does not have one. You can check the file yourself: `shasum -a 256 ~/Downloads/FlipperEmulator-14.3.pkg` must show the checksum from `SHA256SUMS.txt`. Everything the installer and the app download is pinned to an exact checksum, and Multipass is only installed if it carries Canonical's Apple signature (details in [SECURITY.md](SECURITY.md)).
 
-**Source:** the Mac app (Python), the install script and the build tools are in `FlipperEmulator 14.2 macOS source.zip` next to the installer; the package itself is built on Linux without Mac tools.
+**Source:** the Mac app (Python), the install script and the build tools are in `FlipperEmulator 14.3 macOS source.zip` next to the installer; the package itself is built on Linux without Mac tools.
+
+---
+
+## Version 14.3 (development build, image check fix)
+
+Version **14.3** fixes the real cause of the message *"The Flipper OS image is still open in another program"* that the Mac tester saw: it was a false alarm of the safety check added in 13.8. The check looks through all running programs with `find`, and GNU `find` itself keeps the image open while it searches - so the check found its own search tool and refused. This affected the **preview setup and the real Flipper OS on Linux (13.8 to 14.2) and on the Mac**. The search now finishes completely before the hits are checked again, and programs that have already ended are ignored. Tested with GNU `find`: 30 of 30 checks were false alarms before, 0 of 30 now; real holders (open file or memory mapping) are still found.
+
+The administrator helper is renewed (version 4): on Linux the app asks once for your password after the update; on the Mac this happens automatically inside the Linux environment. Windows is unchanged.
+
+SHA-256 of the build files (also in `SHA256SUMS.txt`):
+
+| File | SHA-256 |
+|---|---|
+| `FlipperEmulator 14.3.exe` | `543BC78822DC0C3F73A7EF8EE641F9B27A97BCF1A3BB6DDDE94D5679C05E4848` |
+| `FlipperEmulator 14.3.bat` | `4A8586951FE298BB7FE6FD75E8E7383D91262FF40E4C15B2EF8CDF0FEB98FD3D` |
+| `FlipperEmulator 14.3.sh` | `2316543F7C214677A3B306AA1AEBD9765998DF32C428107C1F745E3062997AEE` |
+| `FlipperEmulator-14.3-x86_64.AppImage` | `8227F52CBBB26128BCDE92FCF738F698DEFA3377CA149291986383284F3CF8EB` |
+| `FlipperEmulator-14.3-aarch64.AppImage` | `6C4547CE6926AC51DE7E260D36F77F75998D81B5585812BC39313CEADA5726DB` |
+| `FlipperEmulator-14.3.pkg` | `D5DC1D3023316480F05165CC48235A9573CDDE76C51335541AD710842631ACF5` |
+| `FlipperEmulator 14.3 macOS source.zip` | `ED4567C9C841DDE078DE7FBB03A8E47479F570D42B18A312D7CBE864393D009E` |
+
+The files are in `DevBuilds/FlipperEmulator 14.3`.
 
 ---
 
 ## Version 14.2 (development build, real Flipper OS fix)
+
+> **Note:** the actual cause of this message was found and fixed in [14.3](#version-143-development-build-image-check-fix).
 
 Version **14.2** fixes a problem a Mac tester found: the **real Flipper OS** (and the FlipCTL preview setup) stopped with *"The Flipper OS image is still open in another program"*, although no emulator was running.
 

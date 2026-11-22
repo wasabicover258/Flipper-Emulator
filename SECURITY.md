@@ -6,8 +6,8 @@ Flipper Emulator is an unofficial community project. It sets up emulators and do
 
 | Version | Security fixes |
 |---|---|
-| 14.0 (development build, adds macOS) | yes |
-| 13.8 (development build) | yes |
+| 14.1 (development build) and newer | yes |
+| 14.0, 13.8 (development builds) | no - the Windows files do not start, please use 14.1 |
 | 13.7 and older | no - please update |
 
 ## Reporting a vulnerability
@@ -16,7 +16,7 @@ Please **do not open a public issue** for a security problem. Use GitHub's priva
 
 Please include the version, Windows, Linux (distribution, x86_64 / ARM64) or macOS (version, Apple silicon / Intel), the steps to reproduce and what an attacker would gain. You get an answer as soon as possible; fixes are published as a new version in `DevBuilds` and in the next release.
 
-## Security model (13.8)
+## Security model (since 13.8)
 
 What the program protects against:
 
@@ -70,9 +70,9 @@ Archives are unpacked with path checks (no "zip slip").
 - The `.exe` is a small launcher that contains the same `.bat`. It is **not code-signed** yet, so SmartScreen may warn. Check the SHA-256 against `SHA256SUMS.txt` in the build folder and the release notes. Signing is planned (SignPath Foundation for open-source projects or Azure Trusted Signing).
 - Windows needs administrator rights only to enable WSL and, if missing, to install the Microsoft Visual C++ runtime.
 
-### macOS (14.0, experimental)
+### macOS (since 14.0, experimental)
 
-- `FlipperEmulator-<version>.pkg` is **not signed or notarized** (that needs a paid Apple Developer account). macOS therefore blocks it at the first double-click and you allow it once under *System Settings > Privacy & Security > Open Anyway*. Check the SHA-256 against `SHA256SUMS.txt` first: `shasum -a 256 FlipperEmulator-14.0.pkg`.
+- `FlipperEmulator-<version>.pkg` is **not signed or notarized** (that needs a paid Apple Developer account). macOS therefore blocks it at the first double-click and you allow it once under *System Settings > Privacy & Security > Open Anyway*. Check the SHA-256 against `SHA256SUMS.txt` first: `shasum -a 256 FlipperEmulator-14.1.pkg`.
 - The package contains only the program files (Python code, pictures, fonts, the Linux installer for the virtual machine) and an install script, no Mac programs. The script runs as root during the installation: it downloads Python and Qt for Python with fixed checksums, puts `Flipper Emulator.app` into `/Applications`, a link on the desktop of the logged-in user, and logs every step to `/var/log/flipper-emulator-install.log`. Nothing is installed as a background service.
 - The Linux parts run in a private Ubuntu virtual machine ("flipperone") managed by Multipass, the Mac counterpart of WSL. The app talks to it only over SSH with its own key (`~/Library/Application Support/FlipperOneDemo/vm/id_ed25519`, created on the Mac) and forwards the local ports to `127.0.0.1` on the Mac. The virtual machine's network is only reachable from this Mac. Inside it the same Linux version of Flipper Emulator runs with all protections listed above.
 - Multipass needs administrator rights once (macOS password dialog) and stays installed after *Uninstall Everything*, like WSL on Windows.
